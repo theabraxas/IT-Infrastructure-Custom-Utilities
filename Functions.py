@@ -90,7 +90,7 @@ def SystemImporter():
 	while True:
 		os.chdir("C:/users/stewart.olson/desktop/stuff/code/python/HealthCheck")
 		print "\n"
-		print "Welcome to the Abraxas.io HealthCheck Configuration Manager"
+		print "Welcome to the HealthCheck Configuration Manager"
 		print "\n"
 		print "Press 1 to add addresses to config files."
 		print "Press 2 to search for addresses in config files."
@@ -319,6 +319,7 @@ def NetworkTools():
 def PowershellTools():
 	import os
 	import time
+	import subprocess
 	import Tkinter as tk
 	import tkFileDialog as filedialog
 	while True:
@@ -330,7 +331,8 @@ def PowershellTools():
 		print "Press 2 to start a New-PSSession with a remote machine."
 		print "Press 3 to get MD5 hash of object."
 		print "Press 4 to unlock an AD account."
-		print "Press 5 to exit"
+		print "Press 5 to get Remote System Uptime"
+		print "Press 6 to exit"
 		print "\n"
 
 		choice = raw_input("Enter your choice: ")
@@ -375,7 +377,37 @@ def PowershellTools():
 			os.system("cls")
 
 		elif choice == "5":
+			RemoteTarget = raw_input("Which system do you want the uptime for?: ")
+#Unintents below are for formatting of the .ps1 file. It is not necessary but otherwise the .ps1 file looks WEIRD.
+			psfunction = """
+function Get-SystemUptime($RemoteSystem) {
+	$Target = $RemoteSystem
+	$operatingSystem = Get-WmiObject Win32_OperatingSystem -ComputerName $Target
+	"$((Get-Date) - ([Management.ManagementDateTimeConverter]::ToDateTime($operatingSystem.LastBootUpTime)))"
+}
+"""
+			psuptime = open("psuptime.ps1", "w")
+			psuptime.write(psfunction)
+			psuptime.write("Get-SystemUptime -RemoteSystem " + RemoteTarget)
+			psuptime.close()
+			print "File Created, checking system"
+			#var = os.system("powershell -noexit -ExecutionPolicy Unrestricted C:\Users\stewart.olson\Desktop\Stuff\Code\Python\HealthCheck\psuptime.ps1")
+			thing = subprocess.Popen("powershell -ExecutionPolicy Unrestricted -File C:\Users\stewart.olson\Desktop\Stuff\Code\Python\HealthCheck\psuptime.ps1", shell=True, stdout=subprocess.PIPE).stdout.read()
+			days = thing.split('.')
+			hours = days[1].split(':')
+			print "\nThe system %s has been up for %s days %s hours and %s minutes\n" % (RemoteTarget, days[0], hours[0], hours[1])
+			os.system('pause')
+
+		elif choice == "6":
 			os.system("cls")
 			break
 		else:
-			continu
+			continue
+
+# def FileGetter():
+# 	import Tkinter as tk
+# 	import tkFileDialog as filedialog
+
+# 	root = tk.Tk()
+# 	root.withdraw()
+# 	hash_path = filedialog.askopenfilename()
