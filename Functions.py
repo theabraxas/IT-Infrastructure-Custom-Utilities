@@ -332,7 +332,8 @@ def PowershellTools():
 		print "Press 3 to get MD5 hash of object."
 		print "Press 4 to unlock an AD account."
 		print "Press 5 to get Remote System Uptime"
-		print "Press 6 to exit"
+		print "Press 6 to find local users on remote machine"
+		print "Press 7 to exit"
 		print "\n"
 
 		choice = raw_input("Enter your choice: ")
@@ -399,6 +400,81 @@ function Get-SystemUptime($RemoteSystem) {
 			os.system('pause')
 
 		elif choice == "6":
+			RemoteTarget = raw_input("For which system do you want to discover local users?: ")
+			pslocalusers = """
+Param
+(
+	[Parameter(Position=0,Mandatory=$false)]
+	[ValidateNotNullorEmpty()]
+	[Alias('cn')][String[]]$ComputerName=$Env:COMPUTERNAME,
+	[Parameter(Position=1,Mandatory=$false)]
+	[Alias('un')][String[]]$AccountName,
+	[Parameter(Position=2,Mandatory=$false)]
+	[Alias('cred')][System.Management.Automation.PsCredential]$Credential
+)
+	
+$Obj = @()
+
+Foreach($Computer in $ComputerName)
+{
+	If($Credential)
+	{
+		$AllLocalAccounts = Get-WmiObject -Class Win32_UserAccount -Namespace "root\cimv2" `
+		-Filter "LocalAccount='$True'" -ComputerName $Computer -Credential $Credential -ErrorAction Stop
+	}
+	else
+	{
+		$AllLocalAccounts = Get-WmiObject -Class Win32_UserAccount -Namespace "root\cimv2" `
+		-Filter "LocalAccount='$True'" -ComputerName $Computer -ErrorAction Stop
+	}
+	
+	Foreach($LocalAccount in $AllLocalAccounts)
+	{
+		$Object = New-Object -TypeName PSObject
+		
+		$Object|Add-Member -MemberType NoteProperty -Name "Name" -Value $LocalAccount.Name
+		$Object|Add-Member -MemberType NoteProperty -Name "Full Name" -Value $LocalAccount.FullName
+		$Object|Add-Member -MemberType NoteProperty -Name "Caption" -Value $LocalAccount.Caption
+      	$Object|Add-Member -MemberType NoteProperty -Name "Disabled" -Value $LocalAccount.Disabled
+      	$Object|Add-Member -MemberType NoteProperty -Name "Status" -Value $LocalAccount.Status
+      	$Object|Add-Member -MemberType NoteProperty -Name "LockOut" -Value $LocalAccount.LockOut
+		$Object|Add-Member -MemberType NoteProperty -Name "Password Changeable" -Value $LocalAccount.PasswordChangeable
+		$Object|Add-Member -MemberType NoteProperty -Name "Password Expires" -Value $LocalAccount.PasswordExpires
+		$Object|Add-Member -MemberType NoteProperty -Name "Password Required" -Value $LocalAccount.PasswordRequired
+		$Object|Add-Member -MemberType NoteProperty -Name "SID" -Value $LocalAccount.SID
+		$Object|Add-Member -MemberType NoteProperty -Name "SID Type" -Value $LocalAccount.SIDType
+		$Object|Add-Member -MemberType NoteProperty -Name "Account Type" -Value $LocalAccount.AccountType
+		$Object|Add-Member -MemberType NoteProperty -Name "Domain" -Value $LocalAccount.Domain
+		$Object|Add-Member -MemberType NoteProperty -Name "Description" -Value $LocalAccount.Description
+		
+		$Obj+=$Object
+	}
+	
+	If($AccountName)
+	{
+		Foreach($Account in $AccountName)
+		{
+			$Obj|Where-Object{$_.Name -like "$Account"}
+		}
+	}
+	else
+	{
+		$Obj
+	}
+}
+"""
+			theoutput = subprocess.Popen("powershell -ExecutionPolicy Unrestricted -File C:\Users\stewart.olson\Desktop\Stuff\Code\Python\HealthCheck\pslusr.ps1 "+RemoteTarget, shell=True, stdout=subprocess.PIPE).stdout.readlines()
+			for line in theoutput:
+				if "Get-LocalAccount : The term 'Get-LocalAccount' is not recognized as the name of a cmdlet" not in line:
+					print line,
+				else:
+					break
+			os.system('pause')
+
+			
+
+
+		elif choice == "7":
 			os.system("cls")
 			break
 		else:
