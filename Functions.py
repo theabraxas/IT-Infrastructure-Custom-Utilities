@@ -471,10 +471,19 @@ Foreach($Computer in $ComputerName)
 					break
 			os.system('pause')
 
-			
-
-
 		elif choice == "7":
+			target = raw_input("Enter name of computer to clear cache on: ")
+			print "Creating target.ps1 file to flush DNS"
+			flushdns = open("flushdns.ps1", "w")
+			flushdns.write("Invoke-Command -script {Clear-DnsClientCache } -ComputerName " + target)
+			flushdns.close()
+			os.system("powershell -ExecutionPolicy Unrestricted C:\Users\stewart.olson\Desktop\Stuff\Code\Python\HealthCheck\flushdns.ps1")
+			print "\nSystem %s has had it's DNS Cache flushed.\n" % target
+			raw_input("Press enter to continue...")
+			os.system("cls")
+	
+
+		elif choice == "8":
 			os.system("cls")
 			break
 		else:
