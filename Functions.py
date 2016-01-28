@@ -333,7 +333,8 @@ def PowershellTools():
 		print "Press 4 to unlock an AD account."
 		print "Press 5 to get Remote System Uptime"
 		print "Press 6 to find local users on remote machine"
-		print "Press 7 to exit"
+		print "Press 7 to flush DNS of remote machine"
+		print "Press 8 to exit"
 		print "\n"
 
 		choice = raw_input("Enter your choice: ")
