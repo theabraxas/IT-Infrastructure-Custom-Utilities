@@ -393,7 +393,6 @@ function Get-SystemUptime($RemoteSystem) {
 			psuptime.write("Get-SystemUptime -RemoteSystem " + RemoteTarget)
 			psuptime.close()
 			print "File Created, checking system"
-			#var = os.system("powershell -noexit -ExecutionPolicy Unrestricted C:\Users\stewart.olson\Desktop\Stuff\Code\Python\HealthCheck\psuptime.ps1")
 			thing = subprocess.Popen("powershell -ExecutionPolicy Unrestricted -File C:\Users\stewart.olson\Desktop\Stuff\Code\Python\HealthCheck\psuptime.ps1", shell=True, stdout=subprocess.PIPE).stdout.read()
 			days = thing.split('.')
 			hours = days[1].split(':')
