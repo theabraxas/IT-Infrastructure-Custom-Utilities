@@ -1,4 +1,4 @@
-#List of possible ping errors and responses
+# List of possible ping errors and responses
 import os
 exception1 = "TTL expired in transit."
 exception2 = "Destination net unreachable."
