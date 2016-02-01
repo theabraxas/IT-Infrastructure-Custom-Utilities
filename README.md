@@ -1,15 +1,23 @@
-This utility is meant to be a powerful python and powershell system management, monitoring, configuration management, and diagnostic tool. It will include the following features:
+IT Infrastructure Super Utility
+===============================
 
-1) Basic Health Check - Test accessibility, resolution, services, and more of all systems added.
-2) Basic Network Tools - A convenient CLI/GUI for all of the best tools - dig, nslookup, ping, tracert, Test-Connection, etc.
-3) Basic Active Directory Tools - Account lockout check and unlock, AD Event Searching (failed login attempts, replication status), more!
-4) Powershell Tools - PS-Remoting to one or multiple machines, File Hash comparer, WSUS management tools, Windows Defender options
-5) Service checker - Check all machines to verify proper services are started, remotely start/restart services
-6) More! - Things like backup report scanners to alert of failures for different backup systems (3PAR Replication, CommVault reports, and more to come!)
+This utility is intended to be a powerful python and powershell system management, monitoring, configuration management, and diagnostic tool. It will include the following features:
 
-GETTING STARTED
+1. Basic Health Check: Test the accessibility, resolution, services, and more of all systems added.
 
---Infrastrucutre Items Folder--
+2. Basic Network Tools: Convenient interface that exposes all of the best tools - dig, nslookup, ping, tracert, Test-Connection, etc.
+
+3. Basic Active Directory Tools: Account lockout check and unlock, AD Event Searching (failed login attempts, replication status), more!
+
+4. Powershell Tools: PS-Remoting to one or multiple machines, File Hash comparer, WSUS management tools, Windows Defender options
+
+5. Service Checker: Check all machines to verify proper services are started, remotely start/restart services
+
+In the future things like backup report scanners to alert of failures for different backup systems (3PAR Replication, CommVault reports, etc.) will be added.
+
+# Getting Started
+
+## Infrastructure Items Folder
 These files act as a summary of your internal infrastructure. Inside of each file include a list of resolvable hostnames or IP addresses
 
 When scans run you can target systems like "Active Directory Infrastructure" (based on the filename and contents of the file). The health check would then scan all devices in that file and output information.
