@@ -2,31 +2,31 @@ import os
 import sys
 
 while True:
-	options = []
-	for file in os.listdir("./InfrastructureItems"):
-	    if file.endswith(".txt"):
-	    	options.append(file)
+    options = []
+    for config_file in os.listdir("./InfrastructureItems"):
+        if config_file.endswith(".txt"):
+            options.append(config_file)
 
-	nums_and_files = zip(range(len(options)),options)
-	print "\nAvailable lists to modify: \n"
-	for x in nums_and_files:
-		print x
-	choice = raw_input("Please type desired number to edit or 'exit' to quit: ")
-	if choice == "exit":
-		print "Thanks for keeping your files up to date!"
-		break
-	else:
-		choice = int(choice)
-	while True:
-		filelocation = "./InfrastructureItems/" + options[choice]
-		selectedfile = open(filelocation, "a+")
-		morehosts = raw_input("\n\nWould you like to add an IP/Hostname to this file? yes/no : ")
-		if morehosts == "yes":
-			hostname = raw_input("\nPlease enter IP/Hostname to add to selected file: ")
-			selectedfile.write("\n"+hostname)
-			print "IP added Successfully"
-		elif morehosts != "no":
-			print "Please enter 'yes' or 'no'"
-		else:
-			selectedfile.close()
-			break
+    nums_and_files = zip(range(len(options)), options)
+    print "\nAvailable lists to modify: \n"
+    for x in nums_and_files:
+        print x
+    choice = raw_input("Please type desired number to edit or 'exit' to quit: ")
+    if choice == "exit":
+        print "Thanks for keeping your files up to date!"
+        break
+    else:
+        choice = int(choice)
+    while True:
+        file_location = "./InfrastructureItems/" + options[choice]
+        selected_file = open(file_location, "a+")
+        more_hosts = raw_input("\n\nWould you like to add an IP/Hostname to this file? yes/no : ")
+        if more_hosts == "yes":
+            hostname = raw_input("\nPlease enter IP/Hostname to add to selected file: ")
+            selected_file.write("\n" + hostname)
+            print "IP added Successfully"
+        elif more_hosts != "no":
+            print "Please enter 'yes' or 'no'"
+        else:
+            selected_file.close()
+            break
